@@ -1,0 +1,9 @@
+.navbar .container-fluid ul li a {
+    color: white;
+    font-family: calibri;
+    font-size: 150%;
+}
+
+body {
+    background-color: white;
+}

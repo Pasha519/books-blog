@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% extends 'books/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Book details{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/details.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+    <div class="col-md-4">
+    <div class="row">
+<img src="{{post.image.url}}" alt="" style="width: 300px; height: 400px;">
+    </div>
+    <br>
+    <div class="row">
+        <button data-product="{{product.id}}" data-action="add" class="btn add-btn update-cart" type="submit"
+        style="background-color: #8c5d4f; color: white; width: 19rem;">{{post.title|title}}</button>
+    </div>
+</div>
+<div class="col-md-8">
+    <h3>{{post.title|title}}</h3>
+    <br>
+    <h5>Description:</h5>
+    <ul>
+        <li>{{post.body|linebreaksbr|truncatechars:750}}</li>
+    </ul>
+    <h5>Tags:</h5>
+    <ul>
+        {% for category in categories %}
+        <a href="/{{category.id}}/category"><li class="btn btn-primary active">{{category.name|title}}</li></a>
+        {% endfor %}
+    </ul>
+    <br>
+      <h2>Add Reviews Here</h2>
+      <form method="POST">
+          {% csrf_token %}
+            <div class="form-floating">
+                  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                        style="height: 100px" id="content" name="content"></textarea>
+                  <label for="floatingTextarea2">Leave a feedback about the {{product.name}} here.</label>
+            </div>
+            <br>
+            <div class="form-group">
+                <h2>Add Rating Here</h2>
+                <select id="cars" class="form-control" name="rating">
+                    <option value="5" selected>5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+                </div>
+            <br>
+             <input hidden type="text" name="post_id" value="{{post.id}}">
+        <button type="submit" class="btn btn-primary">Add Review</button>
+      </form>
+</div>
+</div>
+<div class="container mt-2">
+          <h2>All Reviews ({{reviews.count}})</h2>
+          {% for review in reviews %}
+          <div class="card">
+                <div class="card-header" style="background-color:rgb(108, 108, 160);color:white">
+                      <span style="font-size: 22px;">{{review.author.username|title}}&nbsp;{{review.customer.last_name|title}}</span> <span
+                            style="font-size: 15px;">{{review.created | naturaltime}}</span>
+                </div>
+                <div class="card-body">
+                      <h6 class="card-text">{{review.content|title}}</h6>
+                    {% if review.rating == 5 %}
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    {% elif review.rating == 4%}
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star"></span>
+                    {% elif review.rating == 3%}
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% elif review.rating == 2%}
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% else %}
+                    <span class="fa fa-star" style="color:orange"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    {% endif %}
+                </div>
+          </div>
+          <br>
+          {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock content %}
